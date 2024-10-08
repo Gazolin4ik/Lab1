@@ -1,7 +1,6 @@
 #include <iostream>
-#include <string>
 #include <stdexcept> 
-using namespace std;
+#include "Arr.h"
  
 // add end array
 void push_back(string* &arr, int &size, const string value) {
@@ -81,7 +80,7 @@ void readArr(string* &arr, int &size) {
     cout << endl;
 }
  
-int main() {
+/*int main() {
     int size = 0;
     string *arr = nullptr;
  
@@ -167,4 +166,4 @@ int main() {
  
     delete[] arr;
     return 0;
-}
+}*/

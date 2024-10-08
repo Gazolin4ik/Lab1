@@ -1,33 +1,32 @@
 #include <iostream>
 #include <stdexcept>  // for using exceptions
- 
-using namespace std;
+#include "AVL-Tree.h"
  
 // Structure of the AVL tree node
-struct Node {
+struct AVLNode {
     int key;
-    Node* left;
-    Node* right;
+    AVLNode* left;
+    AVLNode* right;
     int height;
  
-    Node(int k) : key(k), left(nullptr), right(nullptr), height(1) {}
+    AVLNode(int k) : key(k), left(nullptr), right(nullptr), height(1) {}
 };
  
 // Function to get the height of a node
-int height(Node* node) {
+int height(AVLNode* node) {
     return node ? node->height : 0;
 }
  
 // Calculate the balance factor of the node
-int getBalance(Node* node) {
+int getBalance(AVLNode* node) {
     if (!node) return 0;
     return height(node->left) - height(node->right);
 }
  
 // Right rotation
-Node* rotateRight(Node* y) {
-    Node* x = y->left;
-    Node* T2 = x->right;
+AVLNode* rotateRight(AVLNode* y) {
+    AVLNode* x = y->left;
+    AVLNode* T2 = x->right;
  
     // Perform the rotation
     x->right = y;
@@ -41,9 +40,9 @@ Node* rotateRight(Node* y) {
 }
  
 // Left rotation
-Node* rotateLeft(Node* x) {
-    Node* y = x->right;
-    Node* T2 = y->left;
+AVLNode* rotateLeft(AVLNode* x) {
+    AVLNode* y = x->right;
+    AVLNode* T2 = y->left;
  
     // Perform the rotation
     y->left = x;
@@ -57,9 +56,9 @@ Node* rotateLeft(Node* x) {
 }
  
 // Insert a node into the AVL tree
-Node* insert(Node* node, int key) {
+AVLNode* insert(AVLNode* node, int key) {
     // 1. Perform normal BST insertion
-    if (!node) return new Node(key);
+    if (!node) return new AVLNode(key);
  
     if (key < node->key) {
         node->left = insert(node->left, key);
@@ -103,15 +102,15 @@ Node* insert(Node* node, int key) {
 }
  
 // Find the node with the smallest key (used in deletion)
-Node* minValueNode(Node* node) {
-    Node* current = node;
+AVLNode* minValueNode(AVLNode* node) {
+    AVLNode* current = node;
     while (current->left != nullptr)
         current = current->left;
     return current;
 }
  
 // Remove a node from the AVL tree
-Node* remove(Node* root, int key) {
+AVLNode* remove(AVLNode* root, int key) {
     // 1. Perform standard BST deletion
     if (!root) throw runtime_error("Key not found in AVL tree.");
  
@@ -122,7 +121,7 @@ Node* remove(Node* root, int key) {
     } else {
         // Node with one or no child
         if (!root->left || !root->right) {
-            Node* temp = root->left ? root->left : root->right;
+            AVLNode* temp = root->left ? root->left : root->right;
  
             if (!temp) {
                 temp = root;
@@ -134,7 +133,7 @@ Node* remove(Node* root, int key) {
             delete temp;
         } else {
             // Node with two children
-            Node* temp = minValueNode(root->right);
+            AVLNode* temp = minValueNode(root->right);
             root->key = temp->key;
             root->right = remove(root->right, temp->key);
         }
@@ -176,7 +175,7 @@ Node* remove(Node* root, int key) {
 }
  
 // Search for an element in the AVL tree
-bool search(Node* root, int key) {
+bool search(AVLNode* root, int key) {
     if (!root) return false;
     if (key == root->key) return true;
     if (key < root->key) return search(root->left, key);
@@ -184,7 +183,7 @@ bool search(Node* root, int key) {
 }
  
 // Inorder traversal (for printing the AVL tree in sorted order)
-void inorder(Node* root) {
+void inorder(AVLNode* root) {
     if (root) {
         inorder(root->left);
         cout << root->key << " ";
@@ -192,8 +191,8 @@ void inorder(Node* root) {
     }
 }
  
-int main() {
-    Node* root = nullptr;
+/*int main() {
+    AVLNode* root = nullptr;
     string command;
  
     while (true) {
@@ -251,4 +250,4 @@ int main() {
     }
  
     return 0;
-}
+}*/

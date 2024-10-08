@@ -1,31 +1,30 @@
 #include <iostream>
-#include <string>
-using namespace std;
+#include "SLlist.h"
  
 // Structure node singly linked list
-struct Node {
+struct SLNode {
     string data;
-    Node* next;
+    SLNode* next;
 };
  
 // Adding element in head list
-void push_front(Node*& head, const string& value) {
-    Node* newNode = new Node;
+void push_front(SLNode*& head, const string& value) {
+    SLNode* newNode = new SLNode;
     newNode->data = value;
     newNode->next = head;
     head = newNode;
 }
  
 // Adding element in tail list
-void push_back(Node*& head, const string& value) {
-    Node* newNode = new Node;
+void push_back(SLNode*& head, const string& value) {
+    SLNode* newNode = new SLNode;
     newNode->data = value;
     newNode->next = nullptr;
  
     if (head == nullptr) {
         head = newNode;
     } else {
-        Node* current = head;
+        SLNode* current = head;
         while (current->next != nullptr) {
             current = current->next;
         }
@@ -34,17 +33,17 @@ void push_back(Node*& head, const string& value) {
 }
  
 // Delete element from head list
-void pop_front(Node*& head) {
+void pop_front(SLNode*& head) {
     if (head == nullptr) {
         throw runtime_error("List is empty. Cannot pop from front.");
     }
-    Node* temp = head;
+    SLNode* temp = head;
     head = head->next;
     delete temp;
 }
  
 // Delete element from tail list
-void pop_back(Node*& head) {
+void pop_back(SLNode*& head) {
     if (head == nullptr) {
         throw runtime_error("List is empty. Cannot pop from back.");
     }
@@ -55,7 +54,7 @@ void pop_back(Node*& head) {
         return;
     }
  
-    Node* current = head;
+    SLNode* current = head;
     while (current->next->next != nullptr) {
         current = current->next;
     }
@@ -64,7 +63,7 @@ void pop_back(Node*& head) {
 }
  
 // Delete element by value
-void delete_value(Node*& head, const string& value) {
+void delete_value(SLNode*& head, const string& value) {
     if (head == nullptr) {
         throw runtime_error("List is empty. Cannot delete value.");
     }
@@ -75,7 +74,7 @@ void delete_value(Node*& head, const string& value) {
         return;
     }
  
-    Node* current = head;
+    SLNode* current = head;
     while (current->next != nullptr && current->next->data != value) {
         current = current->next;
     }
@@ -84,19 +83,19 @@ void delete_value(Node*& head, const string& value) {
         throw runtime_error("Value not found in the list.");
     }
  
-    Node* temp = current->next;
+    SLNode* temp = current->next;
     current->next = current->next->next;
     delete temp;
 }
  
 // Read all list
-void read_list(Node* head) {
+void read_list(SLNode* head) {
     if (head == nullptr) {
         cout << "List is empty." << endl;
         return;
     }
  
-    Node* current = head;
+    SLNode* current = head;
     while (current != nullptr) {
         cout << current->data << " -> ";
         current = current->next;
@@ -104,8 +103,8 @@ void read_list(Node* head) {
     cout << "null" << endl;
 }
  
-int main() {
-    Node* head = nullptr;
+/*int main() {
+    SLNode* head = nullptr;
     string command;
  
     while (true) {
@@ -157,4 +156,4 @@ int main() {
     }
  
     return 0;
-}
+}*/

@@ -1,28 +1,5 @@
 #include <iostream>
-#include <string>
-using namespace std;
- 
-// Size hash-table (number of buckets)
-const int TABLE_SIZE = 10;
- 
-// Structure node for chains in hash-table
-struct HashNode {
-    string key;
-    string value;
-    HashNode* next;
-};
- 
-// Hash-table
-struct HashTable {
-    HashNode* table[TABLE_SIZE]; // Array pointers on chains
- 
-    // Initialization empty hash-table
-    HashTable() {
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            table[i] = nullptr;
-        }
-    }
-};
+#include "HashTable.h"
  
 // Simple hash-function for string
 int hashFunction(const string& key) {
@@ -133,7 +110,7 @@ void printHashTable(const HashTable& ht) {
     }
 }
  
-int main() {
+/*int main() {
     HashTable ht;  // Created hash-table
     string command;
  
@@ -179,4 +156,4 @@ int main() {
     }
  
     return 0;
-}
+}*/

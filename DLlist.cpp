@@ -1,17 +1,16 @@
 #include <iostream>
-#include <string>
-using namespace std;
+#include "DLlist.h"
  
 // Structure node DLL
-struct Node {
+struct DLNode {
     string data;
-    Node* next;
-    Node* prev;
+    DLNode* next;
+    DLNode* prev;
 };
  
 // Adding element in head list
-void push_front(Node*& head, Node*& tail, const string& value) {
-    Node* newNode = new Node;
+void push_front(DLNode*& head, DLNode*& tail, const string& value) {
+    DLNode* newNode = new DLNode;
     newNode->data = value;
     newNode->next = head;
     newNode->prev = nullptr;
@@ -26,8 +25,8 @@ void push_front(Node*& head, Node*& tail, const string& value) {
 }
  
 // Adding element in tail list
-void push_back(Node*& head, Node*& tail, const string& value) {
-    Node* newNode = new Node;
+void push_back(DLNode*& head, DLNode*& tail, const string& value) {
+    DLNode* newNode = new DLNode;
     newNode->data = value;
     newNode->next = nullptr;
     newNode->prev = tail;
@@ -42,12 +41,12 @@ void push_back(Node*& head, Node*& tail, const string& value) {
 }
  
 // Delete element from head list
-void pop_front(Node*& head, Node*& tail) {
+void pop_front(DLNode*& head, DLNode*& tail) {
     if (head == nullptr) {
         throw runtime_error("List is empty. Cannot pop from front.");
     }
  
-    Node* temp = head;
+    DLNode* temp = head;
     head = head->next;
  
     if (head != nullptr) {
@@ -60,12 +59,12 @@ void pop_front(Node*& head, Node*& tail) {
 }
  
 // Delete element from tail list
-void pop_back(Node*& head, Node*& tail) {
+void pop_back(DLNode*& head, DLNode*& tail) {
     if (tail == nullptr) {
         throw runtime_error("List is empty. Cannot pop from back.");
     }
  
-    Node* temp = tail;
+    DLNode* temp = tail;
     tail = tail->prev;
  
     if (tail != nullptr) {
@@ -78,12 +77,12 @@ void pop_back(Node*& head, Node*& tail) {
 }
  
 // Delete element by value
-void delete_value(Node*& head, Node*& tail, const string& value) {
+void delete_value(DLNode*& head, DLNode*& tail, const string& value) {
     if (head == nullptr) {
         throw runtime_error("List is empty. Cannot delete value.");
     }
  
-    Node* current = head;
+    DLNode* current = head;
     while (current != nullptr && current->data != value) {
         current = current->next;
     }
@@ -104,13 +103,13 @@ void delete_value(Node*& head, Node*& tail, const string& value) {
 }
  
 // Read all list from head
-void read_list_from_head(Node* head) {
+void read_list_from_head(DLNode* head) {
     if (head == nullptr) {
         cout << "List is empty." << endl;
         return;
     }
  
-    Node* current = head;
+    DLNode* current = head;
     while (current != nullptr) {
         cout << current->data << " -> ";
         current = current->next;
@@ -119,13 +118,13 @@ void read_list_from_head(Node* head) {
 }
  
 // Read all list from tail
-void read_list_from_tail(Node* tail) {
+void read_list_from_tail(DLNode* tail) {
     if (tail == nullptr) {
         cout << "List is empty." << endl;
         return;
     }
  
-    Node* current = tail;
+    DLNode* current = tail;
     while (current != nullptr) {
         cout << current->data << " -> ";
         current = current->prev;
@@ -133,9 +132,9 @@ void read_list_from_tail(Node* tail) {
     cout << "null" << endl;
 }
  
-int main() {
-    Node* head = nullptr;
-    Node* tail = nullptr;
+/*int main() {
+    DLNode* head = nullptr;
+    DLNode* tail = nullptr;
     string command;
  
     while (true) {
@@ -197,4 +196,4 @@ int main() {
     }
  
     return 0;
-}
+}*/

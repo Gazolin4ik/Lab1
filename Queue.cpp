@@ -1,19 +1,5 @@
 #include <iostream>
-#include <string>
-using namespace std;
-
-// structure node DLL
-struct Node {
-    string data;
-    Node* next;
-    Node* prev;
-};
- 
-// Structure for storage queue
-struct Queue {
-    Node* front;  // Pointer to beginning queue
-    Node* rear;   // Pointer to end queue
-};
+#include "Queue.h"
  
 // Initialization empty queue
 void initQueue(Queue& q) {
@@ -23,7 +9,7 @@ void initQueue(Queue& q) {
  
 // Adding element in end queue
 void push(Queue& q, const string& value) {
-    Node* newNode = new Node;
+    QNode* newNode = new QNode;
     newNode->data = value;
     newNode->next = nullptr;
     newNode->prev = q.rear;
@@ -42,7 +28,7 @@ void pop(Queue& q) {
         throw runtime_error("Queue is empty. Cannot pop.");
     }
  
-    Node* temp = q.front;
+    QNode* temp = q.front;
     q.front = q.front->next;
  
     if (q.front != nullptr) {
@@ -61,7 +47,7 @@ void read_queue(Queue& q) {
         return;
     }
  
-    Node* current = q.front;
+    QNode* current = q.front;
     while (current != nullptr) {
         cout << current->data << " -> ";
         current = current->next;
@@ -69,7 +55,7 @@ void read_queue(Queue& q) {
     cout << "null" << endl;
 }
  
-int main() {
+/*int main() {
     Queue q;
     initQueue(q);  // Initialization empty queue
     string command;
@@ -99,4 +85,4 @@ int main() {
     }
  
     return 0;
-}
+}*/

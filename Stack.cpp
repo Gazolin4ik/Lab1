@@ -1,17 +1,5 @@
 #include <iostream>
-#include <string>
-using namespace std;
- 
-// Structure node stack
-struct Node {
-    string data;
-    Node* next;
-};
- 
-// Stack based on SLL
-struct Stack {
-    Node* top;  // Pointer on top stack
-};
+#include "Stack.h"
  
 // Initialization empty stack
 void initStack(Stack& s) {
@@ -19,20 +7,20 @@ void initStack(Stack& s) {
 }
  
 // Adding element on top stack
-void push(Stack& s, const string& value) {
-    Node* newNode = new Node;
+void Spush(Stack& s, const string& value) {
+    SNode* newNode = new SNode;
     newNode->data = value;
     newNode->next = s.top;
     s.top = newNode;
 }
  
 // Delete element from top stack
-void pop(Stack& s) {
+void Spop(Stack& s) {
     if (s.top == nullptr) {
         throw runtime_error("Stack is empty. Cannot pop.");
     }
  
-    Node* temp = s.top;
+    SNode* temp = s.top;
     s.top = s.top->next;
     delete temp;
 }
@@ -44,7 +32,7 @@ void read_stack(Stack& s) {
         return;
     }
  
-    Node* current = s.top;
+    SNode* current = s.top;
     while (current != nullptr) {
         cout << current->data << " -> ";
         current = current->next;
@@ -52,7 +40,7 @@ void read_stack(Stack& s) {
     cout << "null" << endl;
 }
  
-int main() {
+/*int main() {
     Stack s;
     initStack(s);  // Initialization empty stack
     string command;
@@ -68,9 +56,9 @@ int main() {
                 string value;
                 cout << "Enter value to push: ";
                 cin >> value;
-                push(s, value);
+                Spush(s, value);
             } else if (command == "SPOP") {
-                pop(s);
+                Spop(s);
             } else if (command == "SGET") {
                 read_stack(s);
             } else {
@@ -82,4 +70,4 @@ int main() {
     }
  
     return 0;
-}
+}*/
