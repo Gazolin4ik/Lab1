@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "Queue.h"
  
 // Initialization empty queue
@@ -53,6 +54,23 @@ void read_queue(Queue& q) {
         current = current->next;
     }
     cout << "null" << endl;
+}
+
+void saveQueue(ofstream& outFile, Queue q) {
+    outFile << "Queue" << endl;
+    QNode* current = q.front;
+    while (current != nullptr) {
+        outFile << current->data << " ";
+        current = current->next;
+    }
+    outFile << endl;
+}
+ 
+void loadQueue(ifstream& inFile, Queue& q) {
+    string value;
+    while (inFile >> value && value != "Stack") {  // Останавливаемся, когда встречаем следующее ключевое слово
+        push(q, value);  // Добавляем элемент в очередь
+    }
 }
  
 /*int main() {

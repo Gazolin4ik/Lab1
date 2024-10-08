@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "SLlist.h"
  
 // Structure node singly linked list
@@ -101,6 +102,23 @@ void read_list(SLNode* head) {
         current = current->next;
     }
     cout << "null" << endl;
+}
+
+void saveSinglyLinkedList(ofstream& outFile, SLNode* head) {
+    outFile << "SinglyLinkedList" << endl;
+    SLNode* current = head;
+    while (current != nullptr) {
+        outFile << current->data << " ";
+        current = current->next;
+    }
+    outFile << endl;
+}
+ 
+void loadSinglyLinkedList(ifstream& inFile, SLNode*& head) {
+    string value;
+    while (inFile >> value && value != "SinglyLinkedList") {  // Останавливаемся, когда встречаем следующее ключевое слово
+        push_back(head, value);  // Добавляем элемент в конец односвязного списка
+    }
 }
  
 /*int main() {

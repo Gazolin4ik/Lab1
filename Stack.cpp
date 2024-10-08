@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "Stack.h"
  
 // Initialization empty stack
@@ -38,6 +39,23 @@ void read_stack(Stack& s) {
         current = current->next;
     }
     cout << "null" << endl;
+}
+
+void saveStack(ofstream& outFile, Stack s) {
+    outFile << "Stack" << endl;
+    SNode* current = s.top;
+    while (current != nullptr) {
+        outFile << current->data << " ";
+        current = current->next;
+    }
+    outFile << endl;
+}
+ 
+void loadStack(ifstream& inFile, Stack& s) {
+    string value;
+    while (inFile >> value && value != "HashTable") {  // Останавливаемся, когда встречаем следующее ключевое слово
+        Spush(s, value);  // Добавляем элемент в стек
+    }
 }
  
 /*int main() {

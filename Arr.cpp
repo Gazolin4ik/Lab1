@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <stdexcept> 
 #include "Arr.h"
  
@@ -78,6 +79,22 @@ void readArr(string* &arr, int &size) {
         cout << arr[i] << " ";
     }
     cout << endl;
+}
+
+void saveArray(ofstream& outFile, string* arr, int size) {
+    outFile << "Array " << size << endl;
+    for (int i = 0; i < size; ++i) {
+        outFile << arr[i] << " ";
+    }
+    outFile << endl;
+}
+ 
+void loadArray(ifstream& inFile, string*& arr, int& size) {
+    inFile >> size;
+    arr = new string[size];
+    for (int i = 0; i < size; ++i) {
+        inFile >> arr[i];
+    }
 }
  
 /*int main() {

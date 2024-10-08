@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "DLlist.h"
  
 // Structure node DLL
@@ -130,6 +131,23 @@ void read_list_from_tail(DLNode* tail) {
         current = current->prev;
     }
     cout << "null" << endl;
+}
+
+void saveDoublyLinkedList(ofstream& outFile, DLNode* head) {
+    outFile << "DoublyLinkedList" << endl;
+    DLNode* current = head;
+    while (current != nullptr) {
+        outFile << current->data << " ";
+        current = current->next;
+    }
+    outFile << endl;
+}
+ 
+void loadDoublyLinkedList(ifstream& inFile, DLNode*& head, DLNode*& tail) {
+    string value;
+    while (inFile >> value && value != "Queue") {  // Останавливаемся, когда встречаем следующее ключевое слово
+        push_back(head, tail, value);  // Добавляем элемент в конец двусвязного списка
+    }
 }
  
 /*int main() {

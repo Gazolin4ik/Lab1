@@ -13,22 +13,10 @@ using namespace std;
 #include "HashTable.h"  // Реализация хэш-таблицы
 #include "AVL-Tree.h"    // Реализация AVL-дерева
  
-void saveToFile(const string& filename) {
-    // Здесь будет реализована запись всех данных в файл
-    cout << "Data saved to file: " << filename << endl;
-}
- 
-void loadFromFile(const string& filename) {
-    // Здесь будет реализована загрузка данных из файла
-    cout << "Data loaded from file: " << filename << endl;
-}
- 
 // g++ Main.cpp Arr.cpp AVL-Tree.cpp DLlist.cpp HashTable.cpp Queue.cpp SLlist.cpp Stack.cpp -o Main
 
 int main() {
     string command, filename = "data.txt";
-    loadFromFile(filename);  // Загружаем данные из файла
-
     int size = 0;
     string *arr = nullptr;
 
@@ -45,6 +33,20 @@ int main() {
 
     HashTable ht;  // Created hash-table
     AVLNode* root = nullptr;
+
+    // Загружаем данные из файла при старте программы
+    ifstream inFile(filename);
+    if (inFile) {
+        // Загрузка данных для каждой структуры данных
+        loadArray(inFile, arr, size);                // Загрузка массива
+        loadSinglyLinkedList(inFile, slhead);        // Загрузка односвязного списка
+        loadDoublyLinkedList(inFile, head, tail);// Загрузка двусвязного списка
+        loadQueue(inFile, q);                        // Загрузка очереди
+        loadStack(inFile, s);                        // Загрузка стека
+        loadHashTable(inFile, ht);                   // Загрузка хэш-таблицы
+        loadAVLTree(inFile, root);                   // Загрузка AVL-дерева
+        inFile.close();
+    }
  
     while (true) {
         try {
@@ -405,7 +407,19 @@ int main() {
  
             // Завершение программы
             else if (command == "exit") {
-                saveToFile(filename);  // Сохранение данных перед выходом
+                // Сохраняем данные в файл при завершении программы
+                ofstream outFile(filename);
+                if (outFile) {
+                // Сохранение данных для каждой структуры данных
+                    saveArray(outFile, arr, size);               // Сохранение массива
+                    saveSinglyLinkedList(outFile, slhead);       // Сохранение односвязного списка
+                    saveDoublyLinkedList(outFile, head);         // Сохранение двусвязного списка
+                    saveQueue(outFile, q);                       // Сохранение очереди
+                    saveStack(outFile, s);                       // Сохранение стека
+                    saveHashTable(outFile, ht);                  // Сохранение хэш-таблицы
+                    saveAVLTree(outFile, root);                  // Сохранение AVL-дерева
+                    outFile.close();
+                }
                 cout << "Exiting the program." << endl;
                 break;
             }
@@ -418,6 +432,7 @@ int main() {
             cerr << "Unhandled error: " << e.what() << endl;
         }
     }
- 
+    
+    delete[] arr;
     return 0;
 }

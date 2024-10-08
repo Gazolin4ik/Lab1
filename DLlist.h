@@ -10,3 +10,5 @@ void pop_back(DLNode*& head, DLNode*& tail);
 void delete_value(DLNode*& head, DLNode*& tail, const string& value);
 void read_list_from_head(DLNode* head);
 void read_list_from_tail(DLNode* tail);
+void saveDoublyLinkedList(ofstream& outFile, DLNode* head);
+void loadDoublyLinkedList(ifstream& inFile, DLNode*& head, DLNode*& tail);

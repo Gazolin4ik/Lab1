@@ -9,3 +9,5 @@ void pop_front(SLNode*& head);
 void pop_back(SLNode*& head);
 void delete_value(SLNode*& head, const string& value);
 void read_list(SLNode* head);
+void saveSinglyLinkedList(ofstream& outFile, SLNode* head);
+void loadSinglyLinkedList(ifstream& inFile, SLNode*& head);

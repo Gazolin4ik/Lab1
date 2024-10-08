@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <stdexcept>  // for using exceptions
 #include "AVL-Tree.h"
  
@@ -188,6 +189,26 @@ void inorder(AVLNode* root) {
         inorder(root->left);
         cout << root->key << " ";
         inorder(root->right);
+    }
+}
+
+void saveInOrder(ofstream& outFile, AVLNode* node) {
+    if (node == nullptr) return;
+    saveInOrder(outFile, node->left);
+    outFile << node->key << " ";
+    saveInOrder(outFile, node->right);
+}
+ 
+void saveAVLTree(ofstream& outFile, AVLNode* root) {
+    outFile << "AVLTree" << endl;
+    saveInOrder(outFile, root);
+    outFile << endl;
+}
+ 
+void loadAVLTree(ifstream& inFile, AVLNode*& root) {
+    int key;
+    while (inFile >> key) {  // Продолжаем чтение ключей до конца строки
+        root = insert(root, key);  // Вставляем ключ в AVL-дерево
     }
 }
  

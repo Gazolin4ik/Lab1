@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "HashTable.h"
  
 // Simple hash-function for string
@@ -107,6 +108,28 @@ void printHashTable(const HashTable& ht) {
             current = current->next;
         }
         cout << endl;
+    }
+}
+
+void saveHashTable(ofstream& outFile, HashTable& ht) {
+    outFile << "HashTable" << endl;
+    for (int i = 0; i < TABLE_SIZE; ++i) {
+        HashNode* current = ht.table[i];
+        while (current != nullptr) {
+            outFile << current->key << ":" << current->value << " ";
+            current = current->next;
+        }
+    }
+    outFile << endl;
+}
+ 
+void loadHashTable(ifstream& inFile, HashTable& ht) {
+    string pair;
+    while (inFile >> pair && pair != "AVLTree") {  // Останавливаемся, когда встречаем следующее ключевое слово
+        size_t colonPos = pair.find(':');
+        string key = pair.substr(0, colonPos);
+        string value = pair.substr(colonPos + 1);
+        hset(ht, key, value);  // Добавляем элемент в хэш-таблицу
     }
 }
  

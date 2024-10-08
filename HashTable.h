@@ -30,3 +30,5 @@ string hget_by_key(HashTable& ht, const string& key);
 void hget_all(HashTable& ht);
 void hdel(HashTable& ht, const string& key);
 void printHashTable(const HashTable& ht);
+void saveHashTable(ofstream& outFile, HashTable& ht);
+void loadHashTable(ifstream& inFile, HashTable& ht);

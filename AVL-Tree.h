@@ -11,4 +11,6 @@ AVLNode* minValueNode(AVLNode* node);
 AVLNode* remove(AVLNode* root, int key);
 bool search(AVLNode* root, int key);
 void inorder(AVLNode* root);
-
+void saveInOrder(ofstream& outFile, AVLNode* node);
+void saveAVLTree(ofstream& outFile, AVLNode* root);
+void loadAVLTree(ifstream& inFile, AVLNode*& root); 
