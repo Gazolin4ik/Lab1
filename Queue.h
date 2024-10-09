@@ -2,17 +2,15 @@
 #include <string>
 using namespace std;
 
-// structure node DLL
 struct QNode {
     string data;
     QNode* next;
     QNode* prev;
 };
  
-// Structure for storage queue
 struct Queue {
-    QNode* front;  // Pointer to beginning queue
-    QNode* rear;   // Pointer to end queue
+    QNode* front;  
+    QNode* rear;   
 };
 
 void initQueue(Queue& q);

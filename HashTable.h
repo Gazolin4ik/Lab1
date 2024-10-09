@@ -2,21 +2,17 @@
 #include <string>
 using namespace std;
 
-// Size hash-table (number of buckets)
 const int TABLE_SIZE = 10;
 
-// Structure node for chains in hash-table
 struct HashNode {
     string key;
     string value;
     HashNode* next;
 };
 
-// Hash-table
 struct HashTable {
-    HashNode* table[TABLE_SIZE]; // Array pointers on chains
- 
-    // Initialization empty hash-table
+    HashNode* table[TABLE_SIZE]; 
+
     HashTable() {
         for (int i = 0; i < TABLE_SIZE; i++) {
             table[i] = nullptr;

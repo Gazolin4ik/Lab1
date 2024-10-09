@@ -3,272 +3,215 @@
 #include <stdexcept>  // for using exceptions
 #include "AVL-Tree.h"
  
-// Structure of the AVL tree node
+// Структура узла AVL-дерева
 struct AVLNode {
-    int key;
-    AVLNode* left;
-    AVLNode* right;
-    int height;
+    int key;              // Ключ узла
+    AVLNode* left;        // Указатель на левое поддерево
+    AVLNode* right;       // Указатель на правое поддерево
+    int height;           // Высота узла
  
-    AVLNode(int k) : key(k), left(nullptr), right(nullptr), height(1) {}
+    AVLNode(int k) : key(k), left(nullptr), right(nullptr), height(1) {} // Конструктор узла
 };
  
-// Function to get the height of a node
+// Функция для получения высоты узла
 int height(AVLNode* node) {
-    return node ? node->height : 0;
+    return node ? node->height : 0;  // Если узел существует, возвращаем его высоту, иначе 0
 }
  
-// Calculate the balance factor of the node
+// Рассчитываем балансирующий фактор узла
 int getBalance(AVLNode* node) {
-    if (!node) return 0;
-    return height(node->left) - height(node->right);
+    if (!node) return 0;  // Если узел пустой, баланс 0
+    return height(node->left) - height(node->right);  // Разница высот левого и правого поддерева
 }
  
-// Right rotation
+// Правый поворот
 AVLNode* rotateRight(AVLNode* y) {
-    AVLNode* x = y->left;
-    AVLNode* T2 = x->right;
+    AVLNode* x = y->left;  // x — левый ребенок y
+    AVLNode* T2 = x->right;  // T2 — правое поддерево x
  
-    // Perform the rotation
+    // Выполняем правый поворот
     x->right = y;
     y->left = T2;
  
-    // Update heights
+    // Обновляем высоты
     y->height = max(height(y->left), height(y->right)) + 1;
     x->height = max(height(x->left), height(x->right)) + 1;
  
-    return x;  // Return the new root
+    return x;  // Возвращаем новый корень поддерева
 }
  
-// Left rotation
+// Левый поворот
 AVLNode* rotateLeft(AVLNode* x) {
-    AVLNode* y = x->right;
-    AVLNode* T2 = y->left;
+    AVLNode* y = x->right;  // y — правый ребенок x
+    AVLNode* T2 = y->left;  // T2 — левое поддерево y
  
-    // Perform the rotation
+    // Выполняем левый поворот
     y->left = x;
     x->right = T2;
  
-    // Update heights
+    // Обновляем высоты
     x->height = max(height(x->left), height(x->right)) + 1;
     y->height = max(height(y->left), height(y->right)) + 1;
  
-    return y;  // Return the new root
+    return y;  // Возвращаем новый корень поддерева
 }
  
-// Insert a node into the AVL tree
+// Вставка узла в AVL-дерево
 AVLNode* insert(AVLNode* node, int key) {
-    // 1. Perform normal BST insertion
-    if (!node) return new AVLNode(key);
+    // 1. Выполняем стандартную вставку как в бинарном дереве поиска
+    if (!node) return new AVLNode(key);  // Если узел пуст, создаем новый узел
  
-    if (key < node->key) {
-        node->left = insert(node->left, key);
-    } else if (key > node->key) {
-        node->right = insert(node->right, key);
+    if (key < node->key) {               // Если ключ меньше текущего узла
+        node->left = insert(node->left, key);  // Вставляем в левое поддерево
+    } else if (key > node->key) {        // Если ключ больше текущего узла
+        node->right = insert(node->right, key);  // Вставляем в правое поддерево
     } else {
-        throw invalid_argument("Duplicate keys are not allowed in AVL tree.");
+        throw invalid_argument("Duplicate keys are not allowed in AVL tree.");  // Дубликаты ключей не разрешены
     }
  
-    // 2. Update the height of the current node
+    // 2. Обновляем высоту текущего узла
     node->height = 1 + max(height(node->left), height(node->right));
  
-    // 3. Get the balance factor of this node to check if it is balanced
+    // 3. Получаем балансирующий фактор узла
     int balance = getBalance(node);
  
-    // 4. Balance the tree if it becomes unbalanced
+    // 4. Выполняем балансировку дерева, если оно разбалансировано
  
-    // Left Left case
+    // Случай левый-левый
     if (balance > 1 && key < node->left->key) {
-        return rotateRight(node);
+        return rotateRight(node);  // Выполняем правый поворот
     }
  
-    // Right Right case
+    // Случай правый-правый
     if (balance < -1 && key > node->right->key) {
-        return rotateLeft(node);
+        return rotateLeft(node);  // Выполняем левый поворот
     }
  
-    // Left Right case
+    // Случай левый-правый
     if (balance > 1 && key > node->left->key) {
-        node->left = rotateLeft(node->left);
-        return rotateRight(node);
+        node->left = rotateLeft(node->left);  // Сначала левый поворот
+        return rotateRight(node);             // Затем правый поворот
     }
  
-    // Right Left case
+    // Случай правый-левый
     if (balance < -1 && key < node->right->key) {
-        node->right = rotateRight(node->right);
-        return rotateLeft(node);
+        node->right = rotateRight(node->right);  // Сначала правый поворот
+        return rotateLeft(node);                 // Затем левый поворот
     }
  
-    return node;  // Return the unchanged node
+    return node;  // Возвращаем неизмененный узел
 }
  
-// Find the node with the smallest key (used in deletion)
+// Поиск узла с минимальным ключом (используется при удалении)
 AVLNode* minValueNode(AVLNode* node) {
-    AVLNode* current = node;
-    while (current->left != nullptr)
+    AVLNode* current = node;               // Начинаем с текущего узла
+    while (current->left != nullptr)       // Спускаемся в самое левое поддерево
         current = current->left;
-    return current;
+    return current;                        // Возвращаем узел с минимальным ключом
 }
  
-// Remove a node from the AVL tree
+// Удаление узла из AVL-дерева
 AVLNode* remove(AVLNode* root, int key) {
-    // 1. Perform standard BST deletion
-    if (!root) throw runtime_error("Key not found in AVL tree.");
+    // 1. Выполняем стандартное удаление как в бинарном дереве поиска
+    if (!root) throw runtime_error("Key not found in AVL tree.");  // Если узел не найден
  
-    if (key < root->key) {
-        root->left = remove(root->left, key);
-    } else if (key > root->key) {
-        root->right = remove(root->right, key);
-    } else {
-        // Node with one or no child
-        if (!root->left || !root->right) {
-            AVLNode* temp = root->left ? root->left : root->right;
+    if (key < root->key) {                 // Если ключ меньше текущего узла
+        root->left = remove(root->left, key);  // Удаляем из левого поддерева
+    } else if (key > root->key) {          // Если ключ больше текущего узла
+        root->right = remove(root->right, key);  // Удаляем из правого поддерева
+    } else {                               // Если ключ совпадает
+        // Узел с одним ребенком или без детей
+        if (!root->left || !root->right) {  // Если у узла один или ноль детей
+            AVLNode* temp = root->left ? root->left : root->right;  // Выбираем не-null ребенка
  
-            if (!temp) {
+            if (!temp) {                    // Если у узла нет детей
                 temp = root;
-                root = nullptr;
+                root = nullptr;             // Удаляем узел
             } else {
-                *root = *temp;
+                *root = *temp;              // Копируем данные ребенка в узел
             }
  
-            delete temp;
+            delete temp;                    // Удаляем временный узел
         } else {
-            // Node with two children
-            AVLNode* temp = minValueNode(root->right);
-            root->key = temp->key;
-            root->right = remove(root->right, temp->key);
+            // Узел с двумя детьми
+            AVLNode* temp = minValueNode(root->right);  // Находим узел с минимальным ключом в правом поддереве
+            root->key = temp->key;           // Копируем ключ
+            root->right = remove(root->right, temp->key);  // Удаляем узел с минимальным ключом
         }
     }
  
-    if (!root) return root;
+    if (!root) return root;  // Если дерево пустое после удаления, возвращаем nullptr
  
-    // 2. Update the height of the current node
+    // 2. Обновляем высоту текущего узла
     root->height = 1 + max(height(root->left), height(root->right));
  
-    // 3. Get the balance factor of the node
+    // 3. Получаем балансирующий фактор узла
     int balance = getBalance(root);
  
-    // 4. Balance the tree if it becomes unbalanced
+    // 4. Балансируем дерево, если оно разбалансировано
  
-    // Left Left case
+    // Случай левый-левый
     if (balance > 1 && getBalance(root->left) >= 0) {
-        return rotateRight(root);
+        return rotateRight(root);  // Выполняем правый поворот
     }
  
-    // Left Right case
+    // Случай левый-правый
     if (balance > 1 && getBalance(root->left) < 0) {
-        root->left = rotateLeft(root->left);
-        return rotateRight(root);
+        root->left = rotateLeft(root->left);  // Сначала левый поворот
+        return rotateRight(root);             // Затем правый поворот
     }
  
-    // Right Right case
+    // Случай правый-правый
     if (balance < -1 && getBalance(root->right) <= 0) {
-        return rotateLeft(root);
+        return rotateLeft(root);  // Выполняем левый поворот
     }
  
-    // Right Left case
+    // Случай правый-левый
     if (balance < -1 && getBalance(root->right) > 0) {
-        root->right = rotateRight(root->right);
-        return rotateLeft(root);
+        root->right = rotateRight(root->right);  // Сначала правый поворот
+        return rotateLeft(root);                 // Затем левый поворот
     }
  
-    return root;
+    return root;  // Возвращаем текущий корень
 }
  
-// Search for an element in the AVL tree
+// Поиск элемента в AVL-дереве
 bool search(AVLNode* root, int key) {
-    if (!root) return false;
-    if (key == root->key) return true;
-    if (key < root->key) return search(root->left, key);
-    return search(root->right, key);
+    if (!root) return false;               // Если узел не найден, возвращаем false
+    if (key == root->key) return true;     // Если ключ совпадает, возвращаем true
+    if (key < root->key) return search(root->left, key);  // Ищем в левом поддереве
+    return search(root->right, key);       // Ищем в правом поддереве
 }
  
-// Inorder traversal (for printing the AVL tree in sorted order)
+// Симметричный обход (для вывода AVL-дерева в отсортированном порядке)
 void inorder(AVLNode* root) {
     if (root) {
-        inorder(root->left);
-        cout << root->key << " ";
-        inorder(root->right);
+        inorder(root->left);               // Рекурсивный обход левого поддерева
+        cout << root->key << " ";          // Вывод ключа узла
+        inorder(root->right);              // Рекурсивный обход правого поддерева
     }
 }
-
+ 
+// Сохранение симметричного обхода в файл
 void saveInOrder(ofstream& outFile, AVLNode* node) {
-    if (node == nullptr) return;
-    saveInOrder(outFile, node->left);
-    outFile << node->key << " ";
-    saveInOrder(outFile, node->right);
+    if (node == nullptr) return;           // Если узел пуст, ничего не делаем
+    saveInOrder(outFile, node->left);      // Сохраняем левое поддерево
+    outFile << node->key << " ";           // Сохраняем ключ узла
+    saveInOrder(outFile, node->right);     // Сохраняем правое поддерево
 }
  
+// Сохранение AVL-дерева в файл
 void saveAVLTree(ofstream& outFile, AVLNode* root) {
-    outFile << "AVLTree" << endl;
-    saveInOrder(outFile, root);
+    outFile << "AVLTree" << endl;          // Запись заголовка для AVL-дерева
+    saveInOrder(outFile, root);            // Сохранение дерева в порядке симметричного обхода
     outFile << endl;
 }
  
+// Загрузка AVL-дерева из файла
 void loadAVLTree(ifstream& inFile, AVLNode*& root) {
-    int key;
-    while (inFile >> key) {  // Продолжаем чтение ключей до конца строки
-        root = insert(root, key);  // Вставляем ключ в AVL-дерево
+    int key;                               // Переменная для хранения ключа
+    while (inFile >> key) {                // Продолжаем чтение ключей до конца строки
+        root = insert(root, key);          // Вставляем ключ в AVL-дерево
     }
 }
  
-/*int main() {
-    AVLNode* root = nullptr;
-    string command;
- 
-    while (true) {
-        try {
-            cout << "Enter command (TINSERT, TDEL, TGET, exit): ";
-            cin >> command;
- 
-            if (command == "exit") {
-                break;
-            } else if (command == "TINSERT") {
-                cout << "Enter key: ";
-                int key;
-                cin >> key;
-                if (cin.fail()) {  // If input is not an integer
-                    cin.clear();  // Clear the fail state
-                    cin.ignore(10000, '\n');  // Ignore the rest of the invalid input
-                    throw invalid_argument("Invalid input. Key must be an integer.");
-                }
-                root = insert(root, key);
-            } else if (command == "TDEL") {
-                cout << "Enter key to delete: ";
-                int key;
-                cin >> key;
-                if (cin.fail()) {  // If input is not an integer
-                    cin.clear();  // Clear the fail state
-                    cin.ignore(10000, '\n');  // Ignore the rest of the invalid input
-                    throw invalid_argument("Invalid input. Key must be an integer.");
-                }
-                root = remove(root, key);
-            } else if (command == "TGET") {
-                cout << "Search key (enter -1 to print all): ";
-                int key;
-                cin >> key;
-                if (cin.fail()) {  // If input is not an integer
-                    cin.clear();  // Clear the fail state
-                    cin.ignore(10000, '\n');  // Ignore the rest of the invalid input
-                    throw invalid_argument("Invalid input. Key must be an integer.");
-                }
-                if (key == -1) {
-                    inorder(root);
-                    cout << endl;
-                } else {
-                    if (search(root, key)) {
-                        cout << "Key " << key << " found in the tree." << endl;
-                    } else {
-                        cout << "Key " << key << " not found." << endl;
-                    }
-                }
-            } else {
-                cout << "Invalid command." << endl;
-            }
-        } catch (const exception& e) {
-            cerr << "Error: " << e.what() << endl;
-        }
-    }
- 
-    return 0;
-}*/

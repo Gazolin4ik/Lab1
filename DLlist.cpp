@@ -2,216 +2,152 @@
 #include <fstream>
 #include "DLlist.h"
  
-// Structure node DLL
+// Структура узла двусвязного списка
 struct DLNode {
-    string data;
-    DLNode* next;
-    DLNode* prev;
+    string data;    // Данные узла
+    DLNode* next;   // Указатель на следующий узел
+    DLNode* prev;   // Указатель на предыдущий узел
 };
  
-// Adding element in head list
+// Добавление элемента в начало списка
 void push_front(DLNode*& head, DLNode*& tail, const string& value) {
-    DLNode* newNode = new DLNode;
-    newNode->data = value;
-    newNode->next = head;
-    newNode->prev = nullptr;
+    DLNode* newNode = new DLNode;      // Создание нового узла
+    newNode->data = value;             // Присваиваем значение новому узлу
+    newNode->next = head;              // Новый узел указывает на текущий head
+    newNode->prev = nullptr;           // Новый узел будет первым, поэтому prev указывает на nullptr
  
-    if (head != nullptr) {
-        head->prev = newNode;
+    if (head != nullptr) {             // Если список не пуст
+        head->prev = newNode;          // Устанавливаем указатель prev текущего head на новый узел
     } else {
-        tail = newNode; // If list empty, new element it also becomes tail
+        tail = newNode;                // Если список пуст, новый узел становится также и tail
     }
  
-    head = newNode;
+    head = newNode;                    // Новый узел становится head
 }
  
-// Adding element in tail list
+// Добавление элемента в конец списка
 void push_back(DLNode*& head, DLNode*& tail, const string& value) {
-    DLNode* newNode = new DLNode;
-    newNode->data = value;
-    newNode->next = nullptr;
-    newNode->prev = tail;
+    DLNode* newNode = new DLNode;      // Создание нового узла
+    newNode->data = value;             // Присваиваем значение новому узлу
+    newNode->next = nullptr;           // Новый узел будет последним, поэтому next указывает на nullptr
+    newNode->prev = tail;              // Новый узел указывает на текущий tail
  
-    if (tail != nullptr) {
-        tail->next = newNode;
+    if (tail != nullptr) {             // Если список не пуст
+        tail->next = newNode;          // Устанавливаем указатель next текущего tail на новый узел
     } else {
-        head = newNode; // If list empty, new element it also becomes head
+        head = newNode;                // Если список пуст, новый узел становится также и head
     }
  
-    tail = newNode;
+    tail = newNode;                    // Новый узел становится tail
 }
  
-// Delete element from head list
+// Удаление элемента из начала списка
 void pop_front(DLNode*& head, DLNode*& tail) {
-    if (head == nullptr) {
-        throw runtime_error("List is empty. Cannot pop from front.");
+    if (head == nullptr) {             // Проверяем, пуст ли список
+        throw runtime_error("List is empty. Cannot pop from front.");  // Исключение, если список пуст
     }
  
-    DLNode* temp = head;
-    head = head->next;
+    DLNode* temp = head;               // Временный указатель на текущий head
+    head = head->next;                 // Передвигаем head на следующий узел
  
-    if (head != nullptr) {
-        head->prev = nullptr;
+    if (head != nullptr) {             // Если список не пуст после удаления
+        head->prev = nullptr;          // Устанавливаем prev нового head в nullptr
     } else {
-        tail = nullptr; // if list become empty, tail should also be nullptr
+        tail = nullptr;                // Если список стал пустым, tail также должен стать nullptr
     }
  
-    delete temp;
+    delete temp;                       // Удаляем старый head
 }
  
-// Delete element from tail list
+// Удаление элемента с конца списка
 void pop_back(DLNode*& head, DLNode*& tail) {
-    if (tail == nullptr) {
-        throw runtime_error("List is empty. Cannot pop from back.");
+    if (tail == nullptr) {             // Проверяем, пуст ли список
+        throw runtime_error("List is empty. Cannot pop from back.");  // Исключение, если список пуст
     }
  
-    DLNode* temp = tail;
-    tail = tail->prev;
+    DLNode* temp = tail;               // Временный указатель на текущий tail
+    tail = tail->prev;                 // Передвигаем tail на предыдущий узел
  
-    if (tail != nullptr) {
-        tail->next = nullptr;
+    if (tail != nullptr) {             // Если список не пуст после удаления
+        tail->next = nullptr;          // Устанавливаем next нового tail в nullptr
     } else {
-        head = nullptr; // if list become empty, head should also be nullptr
+        head = nullptr;                // Если список стал пустым, head также должен стать nullptr
     }
  
-    delete temp;
+    delete temp;                       // Удаляем старый tail
 }
  
-// Delete element by value
+// Удаление элемента по значению
 void delete_value(DLNode*& head, DLNode*& tail, const string& value) {
-    if (head == nullptr) {
-        throw runtime_error("List is empty. Cannot delete value.");
+    if (head == nullptr) {             // Проверяем, пуст ли список
+        throw runtime_error("List is empty. Cannot delete value.");  // Исключение, если список пуст
     }
  
-    DLNode* current = head;
-    while (current != nullptr && current->data != value) {
-        current = current->next;
+    DLNode* current = head;            // Инициализация текущего узла как head
+    while (current != nullptr && current->data != value) {  // Проход по списку, пока не найдем значение
+        current = current->next;       // Переходим к следующему узлу
     }
  
-    if (current == nullptr) {
-        throw runtime_error("Value not found in the list.");
+    if (current == nullptr) {          // Если значение не найдено
+        throw runtime_error("Value not found in the list.");  // Исключение, если значение не найдено
     }
  
-    if (current == head) {
-        pop_front(head, tail);
-    } else if (current == tail) {
-        pop_back(head, tail);
-    } else {
-        current->prev->next = current->next;
-        current->next->prev = current->prev;
-        delete current;
+    if (current == head) {             // Если узел с данным значением — это head
+        pop_front(head, tail);         // Удаляем узел с начала
+    } else if (current == tail) {      // Если узел с данным значением — это tail
+        pop_back(head, tail);          // Удаляем узел с конца
+    } else {                           // Если узел находится в середине списка
+        current->prev->next = current->next;  // Связываем предыдущий узел с следующим
+        current->next->prev = current->prev;  // Связываем следующий узел с предыдущим
+        delete current;                // Удаляем текущий узел
     }
 }
  
-// Read all list from head
+// Чтение всех элементов списка с начала
 void read_list_from_head(DLNode* head) {
-    if (head == nullptr) {
+    if (head == nullptr) {             // Проверяем, пуст ли список
         cout << "List is empty." << endl;
         return;
     }
  
-    DLNode* current = head;
-    while (current != nullptr) {
-        cout << current->data << " -> ";
-        current = current->next;
+    DLNode* current = head;            // Инициализация текущего узла как head
+    while (current != nullptr) {       // Проход по списку до конца
+        cout << current->data << " -> ";  // Вывод данных узла
+        current = current->next;       // Переход к следующему узлу
     }
-    cout << "null" << endl;
+    cout << "null" << endl;            // Вывод окончания списка
 }
  
-// Read all list from tail
+// Чтение всех элементов списка с конца
 void read_list_from_tail(DLNode* tail) {
-    if (tail == nullptr) {
+    if (tail == nullptr) {             // Проверяем, пуст ли список
         cout << "List is empty." << endl;
         return;
     }
  
-    DLNode* current = tail;
-    while (current != nullptr) {
-        cout << current->data << " -> ";
-        current = current->prev;
+    DLNode* current = tail;            // Инициализация текущего узла как tail
+    while (current != nullptr) {       // Проход по списку до начала
+        cout << current->data << " -> ";  // Вывод данных узла
+        current = current->prev;       // Переход к предыдущему узлу
     }
-    cout << "null" << endl;
+    cout << "null" << endl;            // Вывод окончания списка
 }
-
+ 
+// Сохранение двусвязного списка в файл
 void saveDoublyLinkedList(ofstream& outFile, DLNode* head) {
-    outFile << "DoublyLinkedList" << endl;
-    DLNode* current = head;
-    while (current != nullptr) {
-        outFile << current->data << " ";
-        current = current->next;
+    outFile << "DoublyLinkedList" << endl;  // Запись заголовка для двусвязного списка
+    DLNode* current = head;                 // Инициализация текущего узла как head
+    while (current != nullptr) {            // Проход по списку до конца
+        outFile << current->data << " ";    // Запись данных узла в файл
+        current = current->next;            // Переход к следующему узлу
     }
-    outFile << endl;
+    outFile << endl;                        // Завершаем строку в файле
 }
  
+// Загрузка двусвязного списка из файла
 void loadDoublyLinkedList(ifstream& inFile, DLNode*& head, DLNode*& tail) {
-    string value;
-    while (inFile >> value && value != "Queue") {  // Останавливаемся, когда встречаем следующее ключевое слово
-        push_back(head, tail, value);  // Добавляем элемент в конец двусвязного списка
+    string value;                           // Переменная для хранения значения узла
+    while (inFile >> value && value != "Queue") {  // Читаем файл до ключевого слова "Queue"
+        push_back(head, tail, value);       // Добавляем элемент в конец двусвязного списка
     }
 }
- 
-/*int main() {
-    DLNode* head = nullptr;
-    DLNode* tail = nullptr;
-    string command;
- 
-    while (true) {
-        try {
-            cout << "Enter command (LPUSH, LDEL, LGET, exit): ";
-            cin >> command;
- 
-            if (command == "exit") {
-                break;
-            } else if (command == "LPUSH") {
-                string value, option;
-                cout << "Enter value to push: ";
-                cin >> value;
-                cout << "Push to (head/tail): ";
-                cin >> option;
- 
-                if (option == "head") {
-                    push_front(head, tail, value);
-                } else if (option == "tail") {
-                    push_back(head, tail, value);
-                } else {
-                    cout << "Invalid option." << endl;
-                }
-            } else if (command == "LDEL") {
-                string option;
-                cout << "Delete from (head/tail/value): ";
-                cin >> option;
- 
-                if (option == "head") {
-                    pop_front(head, tail);
-                } else if (option == "tail") {
-                    pop_back(head, tail);
-                } else if (option == "value") {
-                    string value;
-                    cout << "Enter value to delete: ";
-                    cin >> value;
-                    delete_value(head, tail, value);
-                } else {
-                    cout << "Invalid option." << endl;
-                }
-            } else if (command == "LGET") {
-                string option;
-                cout << "Read from (head/tail): ";
-                cin >> option;
- 
-                if (option == "head") {
-                    read_list_from_head(head);
-                } else if (option == "tail") {
-                    read_list_from_tail(tail);
-                } else {
-                    cout << "Invalid option." << endl;
-                }
-            } else {
-                cout << "Invalid command." << endl;
-            }
-        } catch (const exception& e) {
-            cerr << "Error: " << e.what() << endl;
-        }
-    }
- 
-    return 0;
-}*/

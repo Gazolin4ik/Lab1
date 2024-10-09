@@ -51,85 +51,109 @@ int main() {
     while (true) {
         try {
             cout << "Enter command (MPUSH, LDEL, QPOP, etc. or PRINT, exit): ";
-            getline(cin, command);
+            cin >> command;
  
             // Массив (M)
             if (command == "MPUSH") {
-                try {
-                    cout << "Enter index (or press Enter to add at the end): ";
-                    string indexStr;
-                    getline(cin, indexStr);
+            try {
+                cout << "Enter index (-1 to add at the end): ";
+                string indexStr;
+                cin >> indexStr;
  
-                    if (!indexStr.empty()) {
-                        int index = stoi(indexStr);
+                if (indexStr != "-1" && size != 0) {
+                    try {
+                        int index = stoi(indexStr);  // Пробуем преобразовать строку в число
                         if (index >= 0 && index < size) {
                             cout << "Replace existing value? [y/n]: ";
                             string response;
-                            getline(cin, response);
+                            cin >> response;
                             if (response == "y") {
                                 cout << "Enter new value: ";
                                 string value;
-                                getline(cin, value);
-                                replaceArr(arr, size, index, value);
-                            } else {
+                                cin >> value;
+                                replaceArr(arr, size, index, value);  // Замена значения
+                            } else if (response == "n") {
                                 cout << "Enter new value: ";
                                 string value;
-                                getline(cin, value);
-                                addArr(arr, size, index, value);
+                                cin >> value;
+                                addArr(arr, size, index, value);  // Вставка нового значения
+                            } else {
+                                throw invalid_argument("Invalid option for MPUSH.");  // Неверная опция
                             }
                         } else {
-                            throw out_of_range("Invalid index for MPUSH.");
+                            throw out_of_range("Invalid index for MPUSH.");  // Индекс вне допустимых границ
                         }
-                    } else {
-                        cout << "Enter value to push at the end: ";
-                        string value;
-                        getline(cin, value);
-                        push_back(arr, size, value);
+                    } catch (const invalid_argument&) {  // Ловим ошибку преобразования в число
+                        cerr << "Error during MPUSH: Invalid input, expected an integer." << endl;
+                    } catch (const out_of_range&) {  // Ловим ошибку диапазона
+                        cerr << "Error during MPUSH: Index out of range." << endl;
                     }
-                } catch (const exception& e) {
-                    cerr << "Error during MPUSH: " << e.what() << endl;
+                } else {  // Добавление в конец массива
+                    cout << "Enter value to push at the end: ";
+                    string value;
+                    cin >> value;
+                    push_back(arr, size, value);  // Добавление в конец
                 }
-                 
-            } else if (command == "MDEL") {
-                try {
-                    if (size == 0) {
-                        throw runtime_error("Array is empty, nothing to delete.");
-                    } else {
-                        cout << "Enter index to delete: ";
-                        string indexStr;
-                        getline(cin, indexStr);
-                        if (!indexStr.empty()) {
-                            int index = stoi(indexStr);
-                            delArr(arr, size, index);
-                        } else {
-                            throw invalid_argument("Invalid input for MDEL.");
-                        }
-                    }
-                } catch (const exception& e) {
-                    cerr << "Error during MDEL: " << e.what() << endl;
-                }
-            } else if (command == "MGET") {
-                try {
-                    if (size == 0) {
-                        throw runtime_error("Array is empty.");
-                    } else {
-                        cout << "Enter index (or press Enter to get all): ";
-                        string indexStr;
-                        getline(cin, indexStr);
+            } catch (const exception& e) {
+                cerr << "Error during MPUSH: " << e.what() << endl;
+            }
+            }
  
-                        if (!indexStr.empty()) {
-                            int index = stoi(indexStr);
-                            getAt(arr, size, index);
-                        } else {
-                            cout << "Array: ";
-                            readArr(arr, size);
-                            cout << "Array size: " << size << endl;
-                        }
+            // Удаление из массива (MDEL)
+            else if (command == "MDEL") {
+            try {
+                if (size == 0) {
+                    throw runtime_error("Array is empty, nothing to delete.");
+                } else {
+                    cout << "Enter index to delete: ";
+                    string indexStr;
+                    cin >> indexStr;
+ 
+                    try {
+                        int index = stoi(indexStr);  // Пробуем преобразовать строку в число
+                        delArr(arr, size, index);  // Удаление элемента по индексу
+                    } catch (const invalid_argument&) {
+                        cerr << "Error during MDEL: Invalid input." << endl;
+                    } catch (const out_of_range&) {
+                        cerr << "Error during MDEL: Index out of range." << endl;
                     }
+                }
+            } catch (const exception& e) {
+                cerr << "Error during MDEL: " << e.what() << endl;
+            }
+            }
+ 
+            // Получение элемента (MGET)
+            else if (command == "MGET") {
+            try {
+                if (size == 0) {
+                    throw runtime_error("Array is empty.");
+                } else {
+                    cout << "Enter index (or 'all' to get all elements): ";
+                    string indexStr;
+                    cin >> indexStr;
+ 
+                    if (indexStr != "all") {
+                        try {
+                            int index = stoi(indexStr);  // Пробуем преобразовать строку в число
+                            getAt(arr, size, index);  // Получаем элемент по индексу
+                        } catch (const invalid_argument&) {
+                            cerr << "Error during MGET: Invalid input." << endl;
+                        } catch (const out_of_range&) {
+                            cerr << "Error during MGET: Index out of range." << endl;
+                        }
+                    } else if (indexStr == "all") {
+                        cout << "Array: ";
+                        readArr(arr, size);  // Чтение всего массива
+                        cout << "Array size: " << size << endl;
+                    } else {
+                        throw invalid_argument("Invalid option for MGET.");  // Неверная опция
+                    }
+                }
                 } catch (const exception& e) {
                     cerr << "Error during MGET: " << e.what() << endl;
                 }
-            }
+                }
  
             // Односвязный список (SL)
             else if (command == "SLPUSH") {

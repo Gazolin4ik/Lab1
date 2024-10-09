@@ -2,15 +2,13 @@
 #include <string>
 using namespace std;
 
-// Structure node stack
 struct SNode {
     string data;
     SNode* next;
 };
  
-// Stack based on SLL
 struct Stack {
-    SNode* top;  // Pointer on top stack
+    SNode* top;  
 };
 
 void initStack(Stack& s);

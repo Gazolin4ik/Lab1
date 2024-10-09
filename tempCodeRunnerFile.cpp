@@ -1,1 +1,0 @@
-g++ Main.cpp Arr.cpp AVL-Tree.cpp DLlist.cpp HashTable.cpp Queue.cpp SLlist.cpp Stack.cpp -o Main
