@@ -10,7 +10,6 @@ AVLNode* insert(AVLNode* node, int key);
 AVLNode* minValueNode(AVLNode* node);
 AVLNode* remove(AVLNode* root, int key);
 bool search(AVLNode* root, int key);
-void inorder(AVLNode* root);
 void printAVLTree(string& result, AVLNode* tree, int depth = 0, string prefix = "");
 void saveInOrder(ofstream& outFile, AVLNode* node);
 void saveAVLTree(ofstream& outFile, AVLNode* root);
