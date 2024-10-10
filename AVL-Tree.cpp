@@ -182,7 +182,31 @@ bool search(AVLNode* root, int key) {
     if (key < root->key) return search(root->left, key);  // Ищем в левом поддереве
     return search(root->right, key);       // Ищем в правом поддереве
 }
+
+// Функция для печати дерева
+void printAVLTree(string& result, AVLNode* tree, int depth, string prefix) {
+    if (tree == nullptr) {
+        return;
+    }
  
+    // Выводим правое поддерево (расположено выше в консоли)
+    if (tree->right != nullptr) {
+        printAVLTree(result, tree->right, depth + 1, prefix + "\t");
+    }
+ 
+    // Выводим текущий узел с отступом
+    result += prefix;
+    if (depth > 0) {
+        result += "└──";
+    }
+    result += "[" + to_string(tree->key) + "]\n";  // Изменено на tree->key для работы с AVLNode
+ 
+    // Выводим левое поддерево (расположено ниже в консоли)
+    if (tree->left != nullptr) {
+        printAVLTree(result, tree->left, depth + 1, prefix + "\t");
+    }
+}
+
 // Симметричный обход (для вывода AVL-дерева в отсортированном порядке)
 void inorder(AVLNode* root) {
     if (root) {

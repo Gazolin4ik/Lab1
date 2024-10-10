@@ -26,12 +26,12 @@ int main() {
     SLNode* slhead = nullptr;
 
     Queue q;
-    initQueue(q);  // Initialization empty queue
+    initQueue(q);  
 
     Stack s;
-    initStack(s);  // Initialization empty stack
+    initStack(s); 
 
-    HashTable ht;  // Created hash-table
+    HashTable ht;  
     AVLNode* root = nullptr;
 
     // Загружаем данные из файла при старте программы
@@ -390,7 +390,9 @@ int main() {
                         throw invalid_argument("Invalid input. Key must be an integer.");
                     }
                     if (key == -1) {
-                        inorder(root);
+                        string strAVL = "";
+                        printAVLTree(strAVL, root);
+                        cout << strAVL;
                         cout << endl;
                     } else {
                         if (search(root, key)) {
@@ -404,30 +406,67 @@ int main() {
                 }
             }
  
-            // Общая команда PRINT для вывода любой структуры данных
             else if (command == "PRINT") {
                 try {
+                    cout << "Printing all data structures:" << endl;
+ 
+                    // Печать массива
                     if (size == 0) {
-                        throw runtime_error("Array is empty.");
+                        cout << "Array is empty." << endl;
                     } else {
-                        readArr(arr, size);
+                        cout << "Array: ";
+                        readArr(arr, size);  // Функция для печати элементов массива
                     }
-
-                    read_list(slhead);
-
-                    read_list_from_head(head);
-
-                    read_queue(q);
-
-                    read_stack(s);
-
-                    hget_all(ht);
-
-                    inorder(root);
+ 
+                    // Печать односвязного списка (SLList)
+                    cout << "Singly Linked List: ";
+                    if (slhead == nullptr) {
+                        cout << "List is empty." << endl;
+                    } else {
+                        read_list(slhead);  // Функция для печати элементов односвязного списка
+                    }
+ 
+                    // Печать двусвязного списка (DLList)
+                    cout << "Doubly Linked List: ";
+                    if (head == nullptr) {
+                        cout << "List is empty." << endl;
+                    } else {
+                        read_list_from_head(head);  // Функция для печати элементов двусвязного списка
+                    }
+ 
+                    // Печать очереди
+                    cout << "Queue: ";
+                    if (q.front == nullptr) {
+                        cout << "Queue is empty." << endl;
+                    } else {
+                        read_queue(q);  // Функция для печати элементов очереди
+                    }
+ 
+                    // Печать стека
+                    cout << "Stack: ";
+                    if (s.top == nullptr) {
+                        cout << "Stack is empty." << endl;
+                    } else {
+                        read_stack(s);  // Функция для печати элементов стека
+                    }
+ 
+                    // Печать хэш-таблицы
+                    cout << "Hash Table: ";
+                    hget_all(ht);  // Функция для печати всех элементов хэш-таблицы
+ 
+                    // Печать AVL-дерева
+                    cout << "AVL Tree: ";
+                    if (root == nullptr) {
+                        cout << "AVL Tree is empty." << endl;
+                    } else {
+                        inorder(root);  // Функция для печати AVL-дерева в виде структуры
+                    }
+                    cout << endl;
+ 
                 } catch (const exception& e) {
                     cerr << "Error during PRINT: " << e.what() << endl;
                 }
-            }
+                }
  
             // Завершение программы
             else if (command == "exit") {

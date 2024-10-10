@@ -11,4 +11,4 @@ Stack
 HashTable
 
 AVLTree
-
+67 120 130 
