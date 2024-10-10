@@ -206,15 +206,6 @@ void printAVLTree(string& result, AVLNode* tree, int depth, string prefix) {
         printAVLTree(result, tree->left, depth + 1, prefix + "\t");
     }
 }
-
-// Симметричный обход (для вывода AVL-дерева в отсортированном порядке)
-void inorder(AVLNode* root) {
-    if (root) {
-        inorder(root->left);               // Рекурсивный обход левого поддерева
-        cout << root->key << " ";          // Вывод ключа узла
-        inorder(root->right);              // Рекурсивный обход правого поддерева
-    }
-}
  
 // Сохранение симметричного обхода в файл
 void saveInOrder(ofstream& outFile, AVLNode* node) {
